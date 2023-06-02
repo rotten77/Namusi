@@ -28,11 +28,10 @@ class NamusiImage:
     
     def rotate(self):
         self.scaled_image = None
-        self.image = pygame.transform.rotate(self.image, 90)
+        self.image = pygame.transform.rotate(self.image, -90)
     
     def scaled(self):
         if not self.scaled_image:
-            print("scalling")
             # https://stackoverflow.com/questions/20002242/how-to-scale-images-to-screen-size-in-pygame
             swidth, sheight = self.window.get_size()
             sheight -= namusi_gui.BUTTON_HEIGHT # menu bar

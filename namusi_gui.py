@@ -2,7 +2,7 @@ class NamusiGUI:
 
     # defaults
     WIDTH = 1200 * 0.8
-    HEIGHT = WIDTH * 9/16
+    HEIGHT = WIDTH * 3/4# 9/16
     BACKGROUND = (232, 232, 232)
     BUTTON_WIDTH = 100
     BUTTON_HEIGHT = 32
