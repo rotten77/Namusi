@@ -13,16 +13,14 @@ if __name__ == '__main__':
     # pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
     buttons = NamusiButtons(window)
     buttons.add_button('load_image', 'Load image', (0, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 80, 255))
-    buttons.add_button('export_midi', 'Export MIDI', (namusi_gui.BUTTON_WIDTH*1, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 120, 80))
-    buttons.add_button('set_scale', 'Set scale', (namusi_gui.BUTTON_WIDTH*2, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 120, 80))
-    buttons.add_button('set_octaves', 'Set octaves', (namusi_gui.BUTTON_WIDTH*3, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 120, 80))
-    buttons.add_button('play', 'Play', (namusi_gui.BUTTON_WIDTH*4, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 120, 80))
+    buttons.add_button('rotate_image', 'Rotate image', (namusi_gui.BUTTON_WIDTH*1, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 80, 255))
+    # buttons.add_button('export_midi', 'Export MIDI', (namusi_gui.BUTTON_WIDTH*1, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 120, 80))
+    # buttons.add_button('set_scale', 'Set scale', (namusi_gui.BUTTON_WIDTH*2, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 120, 80))
+    # buttons.add_button('set_octaves', 'Set octaves', (namusi_gui.BUTTON_WIDTH*3, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 120, 80))
+    # buttons.add_button('play', 'Play', (namusi_gui.BUTTON_WIDTH*4, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 120, 80))
     buttons.add_button('quit', 'Quit', (namusi_gui.WIDTH-namusi_gui.BUTTON_WIDTH, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(255, 80, 120))
     note_dragged = -1
     notes = NamusiNotes(window)
-    notes.add_note((100, 100), 1)
-    notes.add_note((134, 456), 3)
-    notes.add_note((12, 456), 3)
 
     image = NamusiImage(window)
 
@@ -86,6 +84,10 @@ if __name__ == '__main__':
                     if namusi_dialogs.yesno('Quit?', 'Are you sure want to quit?'):
                         running = False
 
+                if button_id == 'rotate_image':
+                    if image.is_set():
+                        image.rotate()
+
                 if button_id == 'load_image':
                     load_image = True
                     if image.is_set():
@@ -99,7 +101,7 @@ if __name__ == '__main__':
                             except Exception as ex:
                                 namusi_dialogs.error('Exception', str(ex))
 
-        cursor = pygame.SYSTEM_CURSOR_ARROW
+        cursor = pygame.SYSTEM_CURSOR_CROSSHAIR
         # print(f'namusi_gui.any_button_hovered: {namusi_gui.any_button_hovered}')
         # print(f'namusi_gui.any_note_hovered: {namusi_gui.any_note_hovered}')
         if namusi_gui.any_button_hovered:
