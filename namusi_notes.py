@@ -13,7 +13,7 @@ class NamusiNotes():
         self.window = window
     
     def add_note(self, position, length=1):
-        self.notes.append({'position': position, 'length': length})
+        self.notes.append({'position': (position[0]-self.SIZE/2, position[1]-self.SIZE/2), 'length': length})
     
     def get_notes(self):
         return self.notes
