@@ -1,5 +1,5 @@
 import pygame
-from namusi_gui import NamusiGUI as namusi_gui
+from .namusi_gui import NamusiGUI as namusi_gui
 
 class NamusiNotes():
 

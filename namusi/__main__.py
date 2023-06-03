@@ -1,20 +1,21 @@
+import sys
 import pygame
-from namusi_gui import NamusiGUI as namusi_gui
-from namusi_buttons import NamusiButtons, NamusiButtonsActions
-from namusi_dialogs import NamusiDialogs as namusi_dialogs
-from namusi_image import NamusiImage
-from namusi_notes import NamusiNotes, NamusiNotesActions
+from .namusi_gui import NamusiGUI as namusi_gui
+from .namusi_buttons import NamusiButtons, NamusiButtonsActions
+from .namusi_dialogs import NamusiDialogs as namusi_dialogs
+from .namusi_image import NamusiImage
+from .namusi_notes import NamusiNotes, NamusiNotesActions
 
-if __name__ == '__main__':
+def main():
     pygame.init()
     window = pygame.display.set_mode((namusi_gui.WIDTH, namusi_gui.HEIGHT))
     # clock = pygame.time.Clock()
 
     # pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
     buttons = NamusiButtons(window)
-    buttons.add_button('load_image', 'Load', (0, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 80, 255))
-    buttons.add_button('rotate_image', 'Rotate', (namusi_gui.BUTTON_WIDTH*1, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 80, 255))
-    buttons.add_button('select_region', 'Select', (namusi_gui.BUTTON_WIDTH*2, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 80, 255))
+    buttons.add_button('load_image', 'Load image', (0, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 80, 255))
+    buttons.add_button('rotate_image', 'Rotate image', (namusi_gui.BUTTON_WIDTH*1, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 80, 255))
+    buttons.add_button('select_region', 'Select area', (namusi_gui.BUTTON_WIDTH*2, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 80, 255))
     # buttons.add_button('export_midi', 'Export MIDI', (namusi_gui.BUTTON_WIDTH*1, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 120, 80))
     # buttons.add_button('set_scale', 'Set scale', (namusi_gui.BUTTON_WIDTH*2, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 120, 80))
     # buttons.add_button('set_octaves', 'Set octaves', (namusi_gui.BUTTON_WIDTH*3, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(0, 120, 80))
@@ -122,9 +123,7 @@ if __name__ == '__main__':
                             except Exception as ex:
                                 namusi_dialogs.error('Exception', str(ex))
 
-        if region_selection:
-            print(region)
-        
+      
         region_surface = pygame.Surface(window.get_size(), pygame.SRCALPHA)
         pygame.draw.rect(region_surface, (0, 0, 0, 128), pygame.Rect(0, 0, region[0][0], namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT))
         pygame.draw.rect(region_surface, (0, 0, 0, 128), pygame.Rect(region[0][0], 0, region[1][0]-region[0][0], region[0][1]))
@@ -143,3 +142,6 @@ if __name__ == '__main__':
         pygame.display.update()
         # clock.tick(FPS)
     pygame.quit()
+
+if __name__ == '__main__':
+    sys.exit(main())
