@@ -12,7 +12,7 @@ class NamusiNotes():
         # self.notes = []
         self.window = window
     
-    def add_note(self, position, length=1):
+    def add_note(self, position, length=2):
         self.notes.append({'position': (position[0]-self.SIZE/2, position[1]-self.SIZE/2), 'length': length})
     
     def get_notes(self):
@@ -35,22 +35,19 @@ class NamusiNotesActions():
                 namusi_gui.any_note_hovered = True
             
             pygame.draw.rect(self.window, color, pygame.Rect(note['position'][0], note['position'][1], NamusiNotes.SIZE*note['length'], NamusiNotes.SIZE))
-
             
-            font = pygame.font.SysFont('Helvetica', 16)
+            font = pygame.font.SysFont('Helvetica', 12)
+            text = font.render("##" , True , (0, 0, 0))
+            note_center = namusi_gui.get_center_point(note['position'], (NamusiNotes.SIZE*note['length'], NamusiNotes.SIZE), (text.get_width(), text.get_height()))
+            self.window.blit(text, (note_center[0], note_center[1]))
+
             if note['length'] > 1:
-                text = font.render("-" , True , (0, 0, 0))
-                note_center = namusi_gui.get_center_point(note['position'], (NamusiNotes.SIZE, NamusiNotes.SIZE), (text.get_width(), text.get_height()))
+                label_color = NamusiNotes.COLOR_DEF if is_mouse_on_object else namusi_gui.get_hover_color(NamusiNotes.COLOR_DEF)
+                text = font.render("+", True, label_color)
+                self.window.blit(text, (note['position'][0] + NamusiNotes.SIZE*note['length'] - text.get_width() - 4, note_center[1]))
+
+                text = font.render("-", True, label_color)
                 self.window.blit(text, (note['position'][0] + 4, note_center[1]))
-
-            text = font.render("+" , True , (0, 0, 0))
-            note_center = namusi_gui.get_center_point(note['position'], (NamusiNotes.SIZE, NamusiNotes.SIZE), (text.get_width(), text.get_height()))
-            self.window.blit(text, (note['position'][0]  + NamusiNotes.SIZE*note['length'] - text.get_width() - 4, note_center[1]))
-
-        # if any_note_is_hovered:
-        #     pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_SIZEALL)
-            # pygame.SYSTEM_CURSOR_SIZEALL
-        # pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_SIZEALL if any_note_is_hovered else pygame.SYSTEM_CURSOR_ARROW)
     
     def note_pressed(self):
         note_id = -1
