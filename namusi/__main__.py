@@ -5,6 +5,7 @@ from .namusi_buttons import NamusiButtons, NamusiButtonsActions
 from .namusi_dialogs import NamusiDialogs as namusi_dialogs
 from .namusi_image import NamusiImage
 from .namusi_notes import NamusiNotes, NamusiNotesActions
+from .namusi_grid import NamusiGrid
 
 def main():
     pygame.init()
@@ -23,16 +24,18 @@ def main():
     buttons.add_button('quit', 'Quit', (namusi_gui.WIDTH-namusi_gui.BUTTON_WIDTH, namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT), (namusi_gui.BUTTON_WIDTH, namusi_gui.BUTTON_HEIGHT), color=(255, 80, 120))
     note_dragged = -1
     notes = NamusiNotes(window)
-
     image = NamusiImage(window)
+    namusi_grid = NamusiGrid(window)
 
     running = True
     note_pressed = -1
     note_dragged = False
     note_mouse_offset = (0, 0)
-    region = ((0, 0), (namusi_gui.WIDTH, namusi_gui.HEIGHT))
-    region_selection_start = False
-    region_selection = False
+
+    # ===
+    # image.load(r'C:\\Users\\zatloukal\\Documents\\dev\\namusi\\11412072_10207290495084702_3856441424234167424_o.jpg')
+    # namusi_gui.region = ((100, 100), (800, 600))
+    # ===
 
     while running:
         mouse = pygame.mouse.get_pos()
@@ -40,7 +43,16 @@ def main():
         window.fill(namusi_gui.BACKGROUND)
         namusi_gui.any_button_hovered = False
         namusi_gui.any_note_hovered = False
+
         image.draw()
+        namusi_grid.draw()
+        
+        if not image.is_set():
+            buttons_actions.disable(['rotate_image', 'select_region'])
+        else:
+            buttons_actions.enable(['rotate_image'])
+            if not namusi_gui.region_selection_start and not namusi_gui.region_selection:
+                buttons_actions.enable(['select_region'])
         buttons_actions.draw()
 
         notes_actions = NamusiNotesActions(window, mouse, notes)
@@ -57,8 +69,8 @@ def main():
             
             
             if event.type == pygame.MOUSEMOTION:
-                if region_selection:
-                    region = (region[0], event.pos)
+                if namusi_gui.region_selection:
+                    namusi_gui.region = (namusi_gui.region[0], event.pos)
                 
                 if note_pressed > -1:
                     # print(f"MOUSEMOTION: {note_pressed}")
@@ -73,17 +85,18 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 note_pressed = notes_actions.note_pressed()
                 note_mouse_offset = notes_actions.note_mouse_offset(note_pressed)
-                region_selection = False
-                if region_selection_start:
-                    region = (event.pos, (event.pos[0]+5, event.pos[1]+5))
-                    region_selection = True
-                    region_selection_start = False
+                namusi_gui.region_selection = False
+                if namusi_gui.region_selection_start:
+                    namusi_gui.region = (event.pos, (event.pos[0]+5, event.pos[1]+5))
+                    namusi_gui.region_selection = True
+                    namusi_gui.region_selection_start = False
                 # print(f"MOUSEBUTTONDOWN: {note_pressed}")
 
             if event.type == pygame.MOUSEBUTTONUP:
-                if region_selection:
-                    region = (region[0], event.pos)
-                    region_selection = False
+                if namusi_gui.region_selection:
+                    namusi_gui.region = (namusi_gui.region[0], event.pos)
+                    namusi_gui.region_selection = False
+                    buttons_actions.enable('select_region')
                     break
                 # print(f"MOUSEBUTTONUP: {note_pressed}")
 
@@ -108,7 +121,8 @@ def main():
                         image.rotate()
                 
                 if button_id == 'select_region':
-                    region_selection_start = True
+                    namusi_gui.region_selection_start = True
+                    buttons_actions.disable('select_region')
 
                 if button_id == 'load_image':
                     load_image = True
@@ -125,10 +139,10 @@ def main():
 
       
         region_surface = pygame.Surface(window.get_size(), pygame.SRCALPHA)
-        pygame.draw.rect(region_surface, (0, 0, 0, 128), pygame.Rect(0, 0, region[0][0], namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT))
-        pygame.draw.rect(region_surface, (0, 0, 0, 128), pygame.Rect(region[0][0], 0, region[1][0]-region[0][0], region[0][1]))
-        pygame.draw.rect(region_surface, (0, 0, 0, 128), pygame.Rect(region[0][0], region[1][1], region[1][0]-region[0][0], namusi_gui.HEIGHT-region[1][1]-namusi_gui.BUTTON_HEIGHT))
-        pygame.draw.rect(region_surface, (0, 0, 0, 128), pygame.Rect(region[1][0], 0, namusi_gui.WIDTH-region[1][0], namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT))
+        pygame.draw.rect(region_surface, (0, 0, 0, 128), pygame.Rect(0, 0, namusi_gui.region[0][0], namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT))
+        pygame.draw.rect(region_surface, (0, 0, 0, 128), pygame.Rect(namusi_gui.region[0][0], 0, namusi_gui.region[1][0]-namusi_gui.region[0][0], namusi_gui.region[0][1]))
+        pygame.draw.rect(region_surface, (0, 0, 0, 128), pygame.Rect(namusi_gui.region[0][0], namusi_gui.region[1][1], namusi_gui.region[1][0]-namusi_gui.region[0][0], namusi_gui.HEIGHT-namusi_gui.region[1][1]-namusi_gui.BUTTON_HEIGHT))
+        pygame.draw.rect(region_surface, (0, 0, 0, 128), pygame.Rect(namusi_gui.region[1][0], 0, namusi_gui.WIDTH-namusi_gui.region[1][0], namusi_gui.HEIGHT-namusi_gui.BUTTON_HEIGHT))
         window.blit(region_surface, (0, 0))
             
             

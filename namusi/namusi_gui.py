@@ -10,6 +10,9 @@ class NamusiGUI:
 
     any_note_hovered = False
     any_button_hovered = False
+    region = ((0, 0), (WIDTH, HEIGHT))
+    region_selection_start = False
+    region_selection = False
 
     @staticmethod
     def get_center_point(wrapper_position, wrapper_size, object_size):

@@ -8,7 +8,8 @@ setup(
     author_email='zatloukal.jan@gmail.com',
     packages=['namusi'],
     install_requires=[
-        'pygame'
+        'pygame',
+        'librosa'
     ],
     py_modules=["namusi"],
     entry_points={"console_scripts": ["namusi = namusi.__main__:main"]},
